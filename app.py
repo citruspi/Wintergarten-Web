@@ -3,9 +3,9 @@ app = Flask(__name__)
 app.config.from_object('config.Development')
 
 @app.route("/")
-def hello():
+def search():
 
-    return render_template("main.html")
+    return render_template("home.html")
 
 if __name__ == "__main__":
     app.run()
