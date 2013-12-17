@@ -1,51 +1,17 @@
 <!doctype html>
 <html class="no-js" lang="en">
+
+    <head>
     
-    {% include 'header.html' %}
+        {% include 'header.html' %}
 
-    <body style="margin-top:3em;">
+    </head>
+
+    <body>
     
-        <div class="row" id="menu">
+        {% include 'menu.html' %}        
 
-            <div class="large-12 columns">
-
-                <ul class="inline-list" style="float:right">
-
-                    <li><a href="/" id="search">Search</a></li>
-                    <li><a href="/top" id="top">Top Films</a></li>
-                    <li><a href="/theatres" id="theatres">In Theatres</a></li>
-                    <li><a href="upcoming" id="upcoming">Upcoming</a></li>
-
-                </ul>
-
-            </div>
-
-        </div>
-
-        <div class="row">
-
-            <div class="large-12 columns">
-
-                <div class="row collapse">
-                        
-                    <div class="small-11 columns">
-                    
-                        <input type="text" 
-                           placeholder="The Hobbit: The Desolation of Smaug">
-                
-                    </div>
-                    
-                    <div class="small-1 columns">
-                
-                        <a href="#" class="button postfix">Search</a>
-                
-                    </div>
-            
-                </div>
-
-            </div>
-
-        </div>
+        {% include 'form.html' %}
  
         {% include 'scripts.html' %}        
 
