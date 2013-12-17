@@ -1,0 +1,37 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+    <head>
+    
+        {% include 'header.html' %}
+
+        <style>
+
+            body {
+
+                margin-top: 3em;
+
+            }
+
+        </style>
+
+    </head>
+
+    <body>
+    
+        {% include 'menu.html' %}        
+
+        {% include 'form.html' %}
+ 
+        {% include 'scripts.html' %}     
+
+        <script type="text/javascript">
+
+            document.getElementById("search_form").elements['query'].value="{{ query }}";
+
+        </script>   
+
+    </body>
+
+</html>
+

@@ -17,10 +17,25 @@
             document.getElementById("upcoming").style.textDecoration="underline";
             break;
 
+        case 'search':
+
+            document.getElementById("search").style.textDecoration="underline";
+            break;        
+
         default:
 
             document.getElementById("search").style.textDecoration="underline";
 
     }
+
+})();
+
+(function () {
+    
+    document.getElementById("submit").addEventListener("click", function () {
+
+        document.getElementById("search_form").submit();
+
+    }, false);
 
 })();
