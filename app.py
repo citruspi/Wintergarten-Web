@@ -20,15 +20,7 @@ def popular():
 
 	for result in response['results']:
 
-		further = requests.get('http://api.themoviedb.org/3/movie/'+str(result['id']), params={'api_key':os.environ['TMDB_API_KEY']}).json()
-
-		films.append(film(result['adult'],
-						  result['backdrop_path'],
-						  result['id'],
-						  result['original_title'],
-						  result['release_date'],
-						  result['poster_path'],
-						  result['title']))
+		films.append(film(result['id'], app.config['IMG_BASE_URL']))
 
 	return	render_template("listing.html", films=films)
 
@@ -43,13 +35,7 @@ def theatres():
 
 		further = requests.get('http://api.themoviedb.org/3/movie/'+str(result['id']), params={'api_key':os.environ['TMDB_API_KEY']}).json()
 
-		films.append(film(result['adult'],
-						  result['backdrop_path'],
-						  result['id'],
-						  result['original_title'],
-						  result['release_date'],
-						  result['poster_path'],
-						  result['title']))
+		films.append(film(result['id'], app.config['IMG_BASE_URL']))		
 
 	return	render_template("listing.html", films=films)	
 
@@ -62,13 +48,7 @@ def upcoming():
 
 	for result in response['results']:
 
-		films.append(film(result['adult'],
-						  result['backdrop_path'],
-						  result['id'],
-						  result['original_title'],
-						  result['release_date'],
-						  result['poster_path'],
-						  result['title']))
+		films.append(film(result['id'], app.config['IMG_BASE_URL']))
 
 	return	render_template("listing.html", films=films)		
 
@@ -81,25 +61,7 @@ def search():
 
 	for result in response['results']:
 
-		further = requests.get('http://api.themoviedb.org/3/movie/'+str(result['id']), params={'api_key':os.environ['TMDB_API_KEY']}).json()
-
-		f = film(result['adult'],
-						  result['backdrop_path'],
-						  result['id'],
-						  result['original_title'],
-						  result['release_date'],
-						  result['poster_path'],
-						  result['title'])
-
-		if f.poster_path is None:
-
-			f.poster_path = 'http://dummyimage.com/1000x1500/000000/ffffff.png&text=No+Poster+Found+:/'
-
-		else:
-
-			f.poster_path = app.config['IMG_BASE_URL']+'original' + f.poster_path
-
-		films.append(f)
+		films.append(film(result['id'], app.config['IMG_BASE_URL']))
 
 	return	render_template("search.html", query=request.form['query'], films=films)
 
