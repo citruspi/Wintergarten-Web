@@ -1,7 +1,7 @@
 class film (object):
 
 	def __init__(self, adult, backdrop_path, id, original_title, release_date,
-				 poster_path, title, imdb_poster):
+				 poster_path, title):
 
 		self.adult = adult
 		self.backdrop_path = backdrop_path
@@ -10,5 +10,3 @@ class film (object):
 		self.release_date = release_date
 		self.poster_path = poster_path
 		self.title = title
-		self.imdb_poster = imdb_poster
-

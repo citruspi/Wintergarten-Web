@@ -2,9 +2,9 @@
 
     switch (window.location.pathname.split('/')[1]) {
 
-        case 'top':
+        case 'popular':
 
-            document.getElementById("top").style.textDecoration="underline";
+            document.getElementById("popular").style.textDecoration="underline";
             break;
 
         case 'theatres':
