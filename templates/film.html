@@ -28,13 +28,50 @@
                 <a class="th" href="#"> 
                     <img src="{{ film.poster_path }}">
                 </a>
-                
+
+                <br><br><br>          
+
+                <table width="100%">
+
+                    <tbody>
+                    
+                        <tr>
+
+                            <td><strong>Status</strong></td>
+                            <td>{{ film.status }}</td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td><strong>Runtime</strong></td>
+                            <td>{{ film.runtime }} min</td>
+
+                        </tr>  
+
+                        <tr>
+
+                            <td><strong>Release Date</strong></td>
+                            <td>{{ film.release_date }}</td>
+
+                        </tr>                                                
+
+                    </tbody>
+
+                </table>                
+
             </div>
 
             <div class="large-9 columns">
 
                 <h2>{{ film.title }}</h2>
                 <h4 class="subheader">{{ film.tagline }}</h4>
+
+                <h4 class="subheader">Overview</h4>
+
+                <hr>
+
+                <p>{{ film.overview }}</p>
 
                 {% if film.trailers['youtube'] %}
 
