@@ -22,9 +22,13 @@
             document.getElementById("search").style.textDecoration="underline";
             break;        
 
+        case '':
+
+            document.getElementById("search").style.textDecoration="underline";            
+
         default:
 
-            document.getElementById("search").style.textDecoration="underline";
+            ''
 
     }
 
