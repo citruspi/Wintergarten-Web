@@ -24,6 +24,13 @@ def search():
 
 	return	render_template("search.html", query=request.form['query'], films=films)
 
+@app.route('/film/<id>', methods=['GET'])
+def film_view(id):
+
+	f = film(id, app.config['IMG_BASE_URL'])
+
+	return render_template('film.html', film=f)
+
 @app.route('/<listing>', methods=['GET'])
 def listing(listing):
 

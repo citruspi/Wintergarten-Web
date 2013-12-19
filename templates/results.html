@@ -7,7 +7,7 @@
 				{% for film in films %}
   				<li>
   					<span data-tooltip data-options="disable_for_touch:true" title="{{ film.title }} ({{ film.release_year }})">
-  						<a class="th radius"> <img src="{{ film.poster_path }}"> </a>
+  						<a class="th radius" href="/film/{{ film.tmdb_id }}"> <img src="{{ film.poster_path }}"> </a>
   					</span>
   				</li>  				
 				{% endfor %}				
