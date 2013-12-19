@@ -9,7 +9,7 @@
 
             body {
 
-                margin-top: 2em;
+                margin-top: 2em;            
 
             }
 
@@ -28,7 +28,7 @@
                 <a class="th" href="#"> 
                     <img src="{{ film.poster_path }}">
                 </a>
-
+                
             </div>
 
             <div class="large-9 columns">
@@ -36,9 +36,33 @@
                 <h2>{{ film.title }}</h2>
                 <h4 class="subheader">{{ film.tagline }}</h4>
 
+                {% if film.trailers['youtube'] %}
+
+                <h4 class="subheader">Trailers &amp; Teasers</h2>
+
+                <hr>
+
+                <ul class="example-orbit-content" data-orbit> 
+
+                    {% for trailer in film.trailers['youtube'] %}
+
+                    <li data-orbit-slide="{{ trailer['name'] }}"> 
+                        
+                    <div class="flex-video"> 
+                        <iframe src="//www.youtube.com/embed/{{ trailer['source'] }}" allowfullscreen="" frameborder="0"></iframe>
+                    </div>
+                
+                    </li> 
+
+                    {% endfor %}
+                    
+                </ul>
+
+                {% endif %}
+
             </div>
 
-        </div>
+        </div>     
 
         {% include 'scripts.html' %}
 
