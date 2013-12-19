@@ -67,7 +67,9 @@
                 <h2>{{ film.title }}</h2>
                 <h4 class="subheader">{{ film.tagline }}</h4>
 
-                <h5 class="subheader">Overview</h4>
+                <br>
+
+                <h5 class="subheader" id="overview">Overview</h4>
 
                 <hr>
 
@@ -75,7 +77,41 @@
 
                 {% if film.trailers['youtube'] %}
 
-                <h5 class="subheader">Trailers &amp; Teasers</h2>
+                <h5 class="subheader" id="cast">Cast</h5>
+
+                <hr>
+
+                <table width="100%">
+
+                    <thead>
+
+                        <tr> 
+
+                            <th>Actor</th>
+                            <th>Character</th> 
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for actor in film.credits['cast'] %}
+
+                            <tr>
+
+                                <td>{{ actor['name'] }}</td>
+                                <td>{{ actor['character'] }}</td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+                <h5 class="subheader" id="trailers">Trailers &amp; Teasers</h2>
 
                 <hr>
 
