@@ -111,6 +111,42 @@
 
                 </table>
 
+                <h5 class="subheader" id="crew">Crew</h5>
+
+                <hr>
+
+                <table width="100%">
+
+                    <thead>
+
+                        <tr> 
+
+                            <th>Name</th>
+                            <th>Department</th> 
+                            <th>Job</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for worker in film.credits['crew'] %}
+
+                            <tr>
+
+                                <td>{{ worker['name'] }}</td>
+                                <td>{{ worker['department'] }}</td>
+                                <td>{{ worker['job'] }}</td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
                 <h5 class="subheader" id="trailers">Trailers &amp; Teasers</h2>
 
                 <hr>
