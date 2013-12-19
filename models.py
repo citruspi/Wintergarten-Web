@@ -6,7 +6,10 @@ class film (object):
     def __init__(self, tmdb_id, poster_path_base):
 
         response = requests.get('http://api.themoviedb.org/3/movie/'+str(tmdb_id), 
-                            params={'api_key':os.environ['TMDB_API_KEY']}).json()
+                            	params={
+                            		'api_key':os.environ['TMDB_API_KEY'],
+                            		'append_to_response':'alternative_titles,credits,images,keywords,releases,trailers,translations,similar_movies,reviews'
+                            	}).json()
 
         self.adult = response['adult']
         self.backdrop_path = response['backdrop_path']
@@ -30,6 +33,15 @@ class film (object):
         self.title = response['title']
         self.vote_average = response['vote_average']
         self.vote_count = response['vote_count']
+        self.alternative_titles = response['alternative_titles']
+        self.credits = response['credits']
+        self.images = response['images']
+        self.keywords = response['keywords']
+        self.releases = response['releases']
+        self.trailers = response['trailers']
+        self.translations = response['translations']
+        self.similar_movies = response['similar_movies']
+        self.reviews = response['reviews']
 
         if self.poster_path is None:
 
