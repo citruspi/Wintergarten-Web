@@ -43,10 +43,31 @@ class film (object):
         self.similar_movies = response['similar_movies']
         self.reviews = response['reviews']
 
+        # Process the poster
+        
         if self.poster_path is None:
 
-        	self.poster_path = 'http://dummyimage.com/1000x1500/000000/ffffff.png&text=No+Poster+Found+:/'
+        	  self.poster_path = 'http://dummyimage.com/1000x1500/000000/ffffff.png&text=No+Poster+Found+:/'
 
         else:
 
-        	self.poster_path = poster_path_base + 'original' + self.poster_path
+            self.poster_path = poster_path_base + 'original' + self.poster_path
+
+        # Process the currency and budget
+      
+        if self.budget is 0:
+
+            self.budget = "Unkown"
+
+        else:
+
+            self.budget = "${:,.2f}".format(self.budget)
+
+        if self.revenue is 0:
+
+            self.revenue = "Unkown"
+
+        else:
+
+            self.revenue = "${:,.2f}".format(self.revenue)
+
