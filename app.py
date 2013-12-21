@@ -20,14 +20,14 @@ def search():
 
 	for result in response['results']:
 
-		films.append(film(result['id'], app.config['IMG_BASE_URL']))
+		films.append(film(result['id'], app.config['IMG_BASE_URL'], app.config['POSTER_SIZE']))
 
 	return	render_template("search.html", query=request.form['query'], films=films)
 
 @app.route('/film/<id>', methods=['GET'])
 def film_view(id):
 
-	f = film(id, app.config['IMG_BASE_URL'])
+	f = film(id, app.config['IMG_BASE_URL'], app.config['POSTER_SIZE'])
 
 	return render_template('film.html', film=f)
 
@@ -50,7 +50,7 @@ def listing(listing):
 
 		for result in response['results']:
 
-			films.append(film(result['id'], app.config['IMG_BASE_URL']))
+			films.append(film(result['id'], app.config['IMG_BASE_URL'], app.config['POSTER_SIZE']))
 
 		return	render_template("listing.html", films=films)	
 

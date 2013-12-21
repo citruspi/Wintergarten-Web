@@ -3,7 +3,7 @@ import requests
 
 class film (object):
 
-    def __init__(self, tmdb_id, poster_path_base):
+    def __init__(self, tmdb_id, image_path_base, poster_size):
 
         response = requests.get('http://api.themoviedb.org/3/movie/'+str(tmdb_id), 
                             	params={
@@ -51,7 +51,7 @@ class film (object):
 
         else:
 
-            self.poster_path = poster_path_base + 'original' + self.poster_path
+            self.poster_path = image_path_base + poster_size + self.poster_path
 
         # Process the currency and budget
       
