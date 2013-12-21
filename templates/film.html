@@ -13,6 +13,11 @@
 
             }
 
+            .orbit-timer,
+            .orbit-slide-number {
+                display: none;
+            }
+
         </style>
 
     </head>
@@ -54,7 +59,21 @@
                             <td><strong>Release Date</strong></td>
                             <td id="release_date">{{ film.release_date }}</td>
 
-                        </tr>                                                
+                        </tr>   
+
+                        <tr>
+
+                            <td><strong>Budget</strong></td>
+                            <td id="release_date">{{ film.budget }}</td>
+
+                        </tr>   
+
+                        <tr>
+
+                            <td><strong>Revenue</strong></td>
+                            <td id="release_date">{{ film.revenue }}</td>
+
+                        </tr>                                                                                                
 
                     </tbody>
 
@@ -151,7 +170,7 @@
 
                 <hr>
 
-                <ul class="example-orbit-content" data-orbit> 
+                <ul class="orbit-content" data-orbit data-options="animation_speed:99999999999999;"> 
 
                     {% for trailer in film.trailers['youtube'] %}
 
