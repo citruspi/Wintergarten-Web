@@ -1,10 +1,19 @@
-from flask import Flask, render_template, request, abort
+from flask import Flask, render_template, request, abort, jsonify
 import requests
 import os
-from models import film
+from pymongo import MongoClient
+from wintergarten import Wintergarten
 
 app = Flask(__name__)
 app.config.from_object('config.Development')
+
+database = MongoClient(app.config['MONGODB_HOST'],
+	                   app.config['MONGODB_PORT'])['MONGODB_DATABASE']
+
+w = Wintergarten(os.environ['TMDB_API_KEY'],
+				 database,
+				 app.config['IMG_BASE_URL'],
+				 app.config['POSTER_SIZE'])
 
 @app.route("/")
 def home():
@@ -14,45 +23,27 @@ def home():
 @app.route('/search', methods=['POST', 'GET'])
 def search():
 
-	response = requests.get('http://api.themoviedb.org/3/search/movie', params={'api_key':os.environ['TMDB_API_KEY'], 'query':request.form['query']}).json()
-
-	films = []
-
-	for result in response['results']:
-
-		films.append(film(result['id'], app.config['IMG_BASE_URL'], app.config['POSTER_SIZE']))
-
-	return	render_template("search.html", query=request.form['query'], films=films)
+	return	render_template("search.html", 
+		                    query=request.form['query'], 
+		                    films=w.search(request.form['query']))
 
 @app.route('/film/<id>', methods=['GET'])
 def film_view(id):
 
-	f = film(id, app.config['IMG_BASE_URL'], app.config['POSTER_SIZE'])
-
-	return render_template('film.html', film=f)
+	return render_template('film.html', film=w.get_film(id))
 
 @app.route('/<listing>', methods=['GET'])
 def listing(listing):
 
 	map = {
-
 		'popular': 'popular',
 		'theatres': 'now_playing',
 		'upcoming': 'upcoming'
-
 	}
 
 	if listing in map:
 
-		response = requests.get('http://api.themoviedb.org/3/movie/' + map[listing], params={'api_key':os.environ['TMDB_API_KEY']}).json()
-
-		films = []
-
-		for result in response['results']:
-
-			films.append(film(result['id'], app.config['IMG_BASE_URL'], app.config['POSTER_SIZE']))
-
-		return	render_template("listing.html", films=films)	
+		return	render_template("listing.html", films=w.get_set(map[listing]))	
 
 	else:
 
