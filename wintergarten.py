@@ -31,48 +31,50 @@ class Wintergarten (object):
 
     def get_film (self, tmdb_id):
 
-        query = self.database.Films.find_one({
-            "tmdb_id": int(tmdb_id)
-        })
+        if self.database is not None:
 
-        if query:
+            query = self.database.Films.find_one({
+                "tmdb_id": int(tmdb_id)
+            })
 
-            film = query
+            if query:
+
+                return query        
+
+        film = requests.get('http://api.themoviedb.org/3/movie/'+str(tmdb_id), 
+                            params={
+                                'api_key': self.api_key,
+                                'append_to_response': 'alternative_titles,credits,images,keywords,releases,trailers,translations,similar_movies,reviews'
+                            }).json()
+            
+        film['tmdb_id'] = film.pop('id')
+        film['release_year'] = film['release_date'].split('-')[0]
+
+        if film['poster_path'] is None:
+
+            film['poster_path'] = 'http://dummyimage.com/1000x1500/000000/ffffff.png&text=No+Poster+Found+:/'
 
         else:
 
-            film = requests.get('http://api.themoviedb.org/3/movie/'+str(tmdb_id), 
-                                params={
-                                    'api_key': self.api_key,
-                                    'append_to_response': 'alternative_titles,credits,images,keywords,releases,trailers,translations,similar_movies,reviews'
-                                }).json()
-            
-            film['tmdb_id'] = film.pop('id')
-            film['release_year'] = film['release_date'].split('-')[0]
+            film['poster_path'] = self.image_base + self.poster_size + film['poster_path']
 
-            if film['poster_path'] is None:
+        if film['budget'] is 0:
 
-                film['poster_path'] = 'http://dummyimage.com/1000x1500/000000/ffffff.png&text=No+Poster+Found+:/'
+            film['budget'] = "Unknown"
 
-            else:
+        else:
 
-                film['poster_path'] = self.image_base + self.poster_size + film['poster_path']
+            film['budget'] = "${:,.2f}".format(film['budget'])
 
-            if film['budget'] is 0:
+        if film['revenue'] is 0:
 
-                film['budget'] = "Unknown"
+            film['revenue'] = "Unknown"
 
-            else:
+        else:
 
-                film['budget'] = "${:,.2f}".format(film['budget'])
+            film['revenue'] = "${:,.2f}".format(film['revenue'])
 
-            if film['revenue'] is 0:
-
-                film['revenue'] = "Unknown"
-
-            else:
-
-                film['revenue'] = "${:,.2f}".format(film['revenue'])
+        if self.database is not None:
 
             self.database.Films.insert(film)                
 
@@ -82,24 +84,26 @@ class Wintergarten (object):
 
         r = []
 
-        query = self.database.Sets.find_one({
-            'set_id': set
-        })
+        if self.database is not None:
 
-        if query:
+            query = self.database.Sets.find_one({
+                'set_id': set
+            })
 
-            r = query['set']
+            if query:
 
-        else:
+                return query['set']        
 
-            response = requests.get('http://api.themoviedb.org/3/movie/' + set, params={
-                'api_key': self.api_key
-            }).json()['results']
+        response = requests.get('http://api.themoviedb.org/3/movie/' + set, params={
+            'api_key': self.api_key
+        }).json()['results']
 
-            for result in response:
+        for result in response:
 
-                r.append(self.get_film(result['id']))
+            r.append(self.get_film(result['id']))
 
+        if self.database is not None:
+            
             self.database.Sets.insert({
                 'set_id': set,
                 'set': r

@@ -1,14 +1,21 @@
 from flask import Flask, render_template, request, abort, jsonify
 import requests
 import os
-from pymongo import MongoClient
 from wintergarten import Wintergarten
 
 app = Flask(__name__)
 app.config.from_object('config.Development')
 
-database = MongoClient(app.config['MONGODB_HOST'],
-	                   app.config['MONGODB_PORT'])['MONGODB_DATABASE']
+try:
+
+  from pymongo import MongoClient
+  
+  database = MongoClient(app.config['MONGODB_HOST'],
+	                       app.config['MONGODB_PORT'])['MONGODB_DATABASE']
+
+except Exception:
+
+  database = None
 
 w = Wintergarten(os.environ['TMDB_API_KEY'],
 				 database,
