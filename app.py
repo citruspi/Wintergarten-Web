@@ -30,16 +30,28 @@ def home():
 @app.route('/search', methods=['POST', 'GET'])
 def search():
 
-	return	render_template("search.html", 
+	if request.method == 'GET':
+
+		return	render_template("search.html", 
 		                    query=request.form['query'], 
 		                    films=w.search(request.form['query']))
 
-@app.route('/film/<id>', methods=['GET'])
+	elif request.method == 'POST':
+
+		return jsonify(w.search(request.form['query']))
+
+@app.route('/film/<id>', methods=['GET', 'POST'])
 def film_view(id):
 
-	return render_template('film.html', film=w.get_film(id))
+	if request.method == 'GET':
 
-@app.route('/<listing>', methods=['GET'])
+		return render_template('film.html', film=w.get_film(id))
+
+	elif request.method == 'POST':
+
+		return jsonify(w.get_film(id))
+
+@app.route('/set/<listing>', methods=['GET', 'POST'])
 def listing(listing):
 
 	map = {
@@ -50,7 +62,13 @@ def listing(listing):
 
 	if listing in map:
 
-		return	render_template("listing.html", films=w.get_set(map[listing]))	
+		if request.method == 'GET':
+
+			return render_template("listing.html", films=w.get_set(map[listing]))	
+
+		elif request.method == 'POST':
+
+			return jsonify(w.get_set(map[listing]))
 
 	else:
 
