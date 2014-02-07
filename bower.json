@@ -1,0 +1,22 @@
+{
+  "name": "Wintergarten",
+  "version": "0.0.1",
+  "homepage": "https://github.com/citruspi/Wintergarten",
+  "authors": [
+    "Mihir Singh (@citruspi)"
+  ],
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "bower-foundation": "https://github.com/zurb/bower-foundation.git#5.1.1",
+    "moment": "2.5.1",
+    "backbone": "1.1.0"
+  },
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
