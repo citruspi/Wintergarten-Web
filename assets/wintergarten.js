@@ -24,7 +24,8 @@
 
         case '':
 
-            document.getElementById("search").style.textDecoration="underline";            
+            document.getElementById("search").style.textDecoration="underline";
+            break;            
 
         default:
 
