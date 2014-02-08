@@ -24,14 +24,62 @@
 
     <body>
     
-        {% include 'menu.html' %}        
+        {% include 'menu.html' %}
 
+        <div class="content">
+            <!-- Film View -->
+        </div>
+
+        {% include 'scripts.html' %}
+
+        <script type="text/javascript">
+
+            var Film = Backbone.Model.extend({
+                urlRoot : '/film',
+                id: window.location.pathname.split('/')[2]
+            });
+
+            var FilmView = Backbone.View.extend({
+
+                el: '.content',
+
+                initialize: function() {
+                    this.render();
+                },
+
+                render: function() {
+                   var html = _.template($('#film-view-template').html(), this.model.toJSON());
+                   this.$el.html(html);
+                }
+
+            });
+
+            $(function() {
+
+                var film = new Film();
+
+                film.fetch({
+                    type: 'POST',
+                    success: function(model, response){
+
+                        new FilmView({model: film});
+
+                    },
+                    error: function(response, options) {
+                        alert("Something went wrong :/");
+                    }
+                });
+            });
+
+        </script>
+
+        <script type="text/template" id="film-view-template">
         <div class="row">
 
             <div class="large-3 columns">
 
                 <a class="th" href="#"> 
-                    <img src="{{ film['poster_path'] }}">
+                    <img src="<%= poster_path %>">
                 </a>
 
                 <br><br><br>          
@@ -43,35 +91,35 @@
                         <tr>
 
                             <td><strong>Status</strong></td>
-                            <td>{{ film['status'] }}</td>
+                            <td><%= status %></td>
 
                         </tr>
 
                         <tr>
 
                             <td><strong>Runtime</strong></td>
-                            <td id="runtime">{{ film['runtime'] }} min</td>
+                            <td id="runtime"><%= runtime %> min</td>
 
                         </tr>  
 
                         <tr>
 
                             <td><strong>Release Date</strong></td>
-                            <td id="release_date">{{ film['release_date'] }}</td>
+                            <td id="release_date"><%= release_date %></td>
 
                         </tr>   
 
                         <tr>
 
                             <td><strong>Budge (USD)</strong></td>
-                            <td id="release_date">{{ film['budget'] }}</td>
+                            <td id="release_date"><%= budget %></td>
 
                         </tr>   
 
                         <tr>
 
                             <td><strong>Revenue (USD)</strong></td>
-                            <td id="release_date">{{ film['revenue'] }}</td>
+                            <td id="release_date"><%= revenue %></td>
 
                         </tr>                                                                                                
 
@@ -83,8 +131,8 @@
 
             <div class="large-9 columns">
 
-                <h2>{{ film['title'] }}</h2>
-                <h4 class="subheader">{{ film['tagline'] }}</h4>
+                <h2><%= title %></h2>
+                <h4 class="subheader"><%= tagline %></h4>
 
                 <br>
 
@@ -92,9 +140,7 @@
 
                 <hr>
 
-                <p>{{ film['overview'] }}</p>
-
-                {% if film['trailers']['youtube'] %}
+                <p><%= overview %></p>
 
                 <h5 class="subheader" id="cast">Cast</h5>
 
@@ -115,16 +161,14 @@
 
                     <tbody>
 
-                        {% for actor in film['credits']['cast'] %}
+                        <% _.each(credits.cast, function(castMember){ %>
 
-                            <tr>
+                        <tr>
+                            <td><%= castMember.name %></h1></td>
+                            <td><%= castMember.character %></td>
+                        </tr>
 
-                                <td>{{ actor['name'] }}</td>
-                                <td>{{ actor['character'] }}</td>
-
-                            </tr>
-
-                        {% endfor %}
+                        <% }); %>
 
                     </tbody>
 
@@ -150,17 +194,15 @@
 
                     <tbody>
 
-                        {% for worker in film['credits']['crew'] %}
+                        <% _.each(credits.crew, function(crewMember){ %>
 
-                            <tr>
+                        <tr>
+                            <td><%= crewMember.name %></h1></td>
+                            <td><%= crewMember.department %></td>
+                            <td><%= crewMember.job %></td>
+                        </tr>
 
-                                <td>{{ worker['name'] }}</td>
-                                <td>{{ worker['department'] }}</td>
-                                <td>{{ worker['job'] }}</td>
-
-                            </tr>
-
-                        {% endfor %}
+                        <% }); %>
 
                     </tbody>
 
@@ -172,33 +214,31 @@
 
                 <ul class="orbit-content" data-orbit data-options="animation_speed:99999999999999;"> 
 
-                    {% for trailer in film['trailers']['youtube'] %}
+                    <% _.each(trailers.youtube, function(trailer) { %>
 
-                    <li data-orbit-slide="{{ trailer['name'] }}"> 
-                        
-                    <div class="flex-video"> 
-                        <iframe src="//www.youtube.com/embed/{{ trailer['source'] }}" allowfullscreen="" frameborder="0"></iframe>
-                    </div>
-                
-                    </li> 
+                    <li data-orbit-slide="<%= trailer.name %>">
 
-                    {% endfor %}
-                    
+                        <div class="flex-video">
+
+                            <iframe src="//www.youtube.com/embed/<%= trailer.source %>" allowfullscreen="" frameborder="0"></iframe>
+
+                        </div>
+
+                    </li>
+
+                    <% }); %>
+
                 </ul>
-
-                {% endif %}
 
             </div>
 
-        </div>     
-
-        {% include 'scripts.html' %}
-
+        </div>
         <script type="text/javascript">
 
-            document.getElementById('release_date').innerHTML=moment("{{ film.release_date }}", "YYYY-MM-DD").format('MMMM Do, YYYY');
-            document.getElementById('runtime').innerHTML=Math.floor({{ film.runtime }} / 60) + " hr " + ({{ film.runtime }} % 60) + " min";
+            document.getElementById('release_date').innerHTML=moment("<%= release_date %>", "YYYY-MM-DD").format('MMMM Do, YYYY');
+            document.getElementById('runtime').innerHTML=Math.floor(<%= runtime %> / 60) + " hr " + (<%= runtime %> % 60) + " min";
 
+        </script>
         </script>
 
     </body>
