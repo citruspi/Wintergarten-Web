@@ -74,7 +74,7 @@
         </script>
 
         <script type="text/template" id="film-view-template">
-        <div class="row">
+        <div class="row" style="margin-bottom:2em;">
 
             <div class="large-3 columns">
 
@@ -207,28 +207,6 @@
                     </tbody>
 
                 </table>
-
-                <h5 class="subheader" id="trailers">Trailers &amp; Teasers</h2>
-
-                <hr>
-
-                <ul class="orbit-content" data-orbit data-options="animation_speed:99999999999999;"> 
-
-                    <% _.each(trailers.youtube, function(trailer) { %>
-
-                    <li data-orbit-slide="<%= trailer.name %>">
-
-                        <div class="flex-video">
-
-                            <iframe src="//www.youtube.com/embed/<%= trailer.source %>" allowfullscreen="" frameborder="0"></iframe>
-
-                        </div>
-
-                    </li>
-
-                    <% }); %>
-
-                </ul>
 
             </div>
 
