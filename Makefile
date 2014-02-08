@@ -11,6 +11,7 @@ build:
 	cp -r bower_components/bower-foundation/js/vendor static/js/vendor
 	cp bower_components/moment/moment.js static/js/moment.min.js
 	cp bower_components/backbone/backbone-min.js static/js/backbone.min.js
+	cp bower_components/backbone/test/vendor/underscore.js static/js/underscore.js
 	cp assets/wintergarten.js static/js/wintergarten.js
 
 	cp bower_components/bower-foundation/css/normalize.css static/css/normalize.css
