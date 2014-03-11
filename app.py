@@ -17,7 +17,7 @@ except Exception:
 
   database = None
 
-w = Wintergarten(os.environ['TMDB_API_KEY'],
+w = Wintergarten(app.config['TMDB_API_KEY'],
 				 database,
 				 app.config['IMG_BASE_URL'],
 				 app.config['POSTER_SIZE'])
