@@ -17,7 +17,7 @@ def home():
 @app.route('/search', methods=['POST', 'GET'])
 def search():
 
-	return	render_template("search.html",
+	return render_template("search.html",
 		                    query=request.form['query'],
 		                    films=wintergarten.search(request.form['query']))
 
