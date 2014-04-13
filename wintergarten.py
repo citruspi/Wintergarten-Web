@@ -1,79 +1,79 @@
 import os
 import requests
+from redis_cache import cache_it_json
+import json
 
-class Wintergarten (object):
+API_KEY = None
+IMAGE_BASE = 'https://image.tmdb.org/t/p/'
+POSTER_SIZE = 'original'
 
-    def __init__ (self, 
-                  api_key, 
-                  image_base='https://image.tmdb.org/t/p/', 
-                  poster_size='original'):
+@cache_it_json(limit=100000, expire=60 * 60 * 24)
+def get_film (tmdb_id):
 
-        self.api_key = api_key
-        self.image_base = image_base
-        self.poster_size = poster_size
+    film = requests.get('http://api.themoviedb.org/3/movie/'+str(tmdb_id),
+                        params={
+                            'api_key': API_KEY,
+                            'append_to_response': 'alternative_titles,credits,images,keywords,releases,trailers,translations,similar_movies,reviews'
+                        }).json()
 
-    def search (self, query):
+    film['tmdb_id'] = film.pop('id')
+    film['release_year'] = film['release_date'].split('-')[0]
 
-        response = requests.get('http://api.themoviedb.org/3/search/movie', params={
-            'api_key': self.api_key,
-            'query': query
-        }).json()['results']
+    if film['poster_path'] is None:
 
-        results = []
+        film['poster_path'] = 'http://dummyimage.com/1000x1500/000000/ffffff.png&text=No+Poster+Found+:/'
 
-        for result in response:
+    else:
 
-            results.append(self.get_film(result['id']))
+        film['poster_path'] = IMAGE_BASE + POSTER_SIZE + film['poster_path']
 
-        return results
+    if film['budget'] is 0:
 
-    def get_film (self, tmdb_id):
+        film['budget'] = "Unknown"
 
-        film = requests.get('http://api.themoviedb.org/3/movie/'+str(tmdb_id), 
-                            params={
-                                'api_key': self.api_key,
-                                'append_to_response': 'alternative_titles,credits,images,keywords,releases,trailers,translations,similar_movies,reviews'
-                            }).json()
-            
-        film['tmdb_id'] = film.pop('id')
-        film['release_year'] = film['release_date'].split('-')[0]
+    else:
 
-        if film['poster_path'] is None:
+        film['budget'] = "${:,.2f}".format(film['budget'])
 
-            film['poster_path'] = 'http://dummyimage.com/1000x1500/000000/ffffff.png&text=No+Poster+Found+:/'
+    if film['revenue'] is 0:
 
-        else:
+        film['revenue'] = "Unknown"
 
-            film['poster_path'] = self.image_base + self.poster_size + film['poster_path']
+    else:
 
-        if film['budget'] is 0:
+        film['revenue'] = "${:,.2f}".format(film['revenue'])
 
-            film['budget'] = "Unknown"
+    return film
 
-        else:
 
-            film['budget'] = "${:,.2f}".format(film['budget'])
+@cache_it_json(limit=100000, expire=60 * 60 * 24)
+def search (query):
 
-        if film['revenue'] is 0:
+    response = requests.get('http://api.themoviedb.org/3/search/movie', params={
+        'api_key': API_KEY,
+        'query': query
+    }).json()['results']
 
-            film['revenue'] = "Unknown"
+    results = []
 
-        else:
+    for result in response:
 
-            film['revenue'] = "${:,.2f}".format(film['revenue'])
+        results.append(get_film(result['id']))
 
-        return film
+    return results
 
-    def get_set (self, set):
 
-        r = []
+@cache_it_json(limit=100000, expire=60 * 60 * 24)
+def get_set (set):
 
-        response = requests.get('http://api.themoviedb.org/3/movie/' + set, params={
-            'api_key': self.api_key
-        }).json()['results']
+    r = []
 
-        for result in response:
+    response = requests.get('http://api.themoviedb.org/3/movie/' + set, params={
+        'api_key': API_KEY
+    }).json()['results']
 
-            r.append(self.get_film(result['id']))
+    for result in response:
 
-        return r
+        r.append(get_film(result['id']))
+
+    return r

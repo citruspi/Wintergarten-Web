@@ -1,31 +1,30 @@
-from flask import Flask, render_template, request, abort, jsonify
-import requests
-import os
-from wintergarten import Wintergarten
+from flask import Flask, render_template, abort
+import wintergarten
+from redis_cache import cache_it_json
 
 app = Flask(__name__)
 app.config.from_object('config.Development')
 
-w = Wintergarten(app.config['TMDB_API_KEY'],
-				 app.config['IMG_BASE_URL'],
-				 app.config['POSTER_SIZE'])
+wintergarten.API_KEY = app.config['TMDB_API_KEY']
+wintergarten.IMAGE_BASE = app.config['IMG_BASE_URL']
+wintergarten.POSTER_SIZE = app.config['POSTER_SIZE']
 
 @app.route("/")
 def home():
 
-    return render_template("home.html")	
+    return render_template("home.html")
 
 @app.route('/search', methods=['POST', 'GET'])
 def search():
 
-	return	render_template("search.html", 
-		                    query=request.form['query'], 
-		                    films=w.search(request.form['query']))
+	return	render_template("search.html",
+		                    query=request.form['query'],
+		                    films=wintergarten.search(request.form['query']))
 
 @app.route('/film/<id>', methods=['GET'])
 def film_view(id):
 
-	return render_template('film.html', film=w.get_film(id))
+	return render_template('film.html', film=wintergarten.get_film(id))
 
 @app.route('/<listing>', methods=['GET'])
 def listing(listing):
@@ -38,7 +37,7 @@ def listing(listing):
 
 	if listing in map:
 
-		return	render_template("listing.html", films=w.get_set(map[listing]))	
+		return	render_template("listing.html", films=wintergarten.get_set(map[listing]))
 
 	else:
 
