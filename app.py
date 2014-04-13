@@ -6,19 +6,7 @@ from wintergarten import Wintergarten
 app = Flask(__name__)
 app.config.from_object('config.Development')
 
-try:
-
-  from pymongo import MongoClient
-  
-  database = MongoClient(app.config['MONGODB_HOST'],
-	                       app.config['MONGODB_PORT'])['MONGODB_DATABASE']
-
-except Exception:
-
-  database = None
-
 w = Wintergarten(app.config['TMDB_API_KEY'],
-				 database,
 				 app.config['IMG_BASE_URL'],
 				 app.config['POSTER_SIZE'])
 

@@ -5,12 +5,10 @@ class Wintergarten (object):
 
     def __init__ (self, 
                   api_key, 
-                  database, 
                   image_base='https://image.tmdb.org/t/p/', 
                   poster_size='original'):
 
         self.api_key = api_key
-        self.database = database
         self.image_base = image_base
         self.poster_size = poster_size
 
@@ -30,16 +28,6 @@ class Wintergarten (object):
         return results
 
     def get_film (self, tmdb_id):
-
-        if self.database is not None:
-
-            query = self.database.Films.find_one({
-                "tmdb_id": int(tmdb_id)
-            })
-
-            if query:
-
-                return query        
 
         film = requests.get('http://api.themoviedb.org/3/movie/'+str(tmdb_id), 
                             params={
@@ -74,25 +62,11 @@ class Wintergarten (object):
 
             film['revenue'] = "${:,.2f}".format(film['revenue'])
 
-        if self.database is not None:
-
-            self.database.Films.insert(film)                
-
         return film
 
     def get_set (self, set):
 
         r = []
-
-        if self.database is not None:
-
-            query = self.database.Sets.find_one({
-                'set_id': set
-            })
-
-            if query:
-
-                return query['set']        
 
         response = requests.get('http://api.themoviedb.org/3/movie/' + set, params={
             'api_key': self.api_key
@@ -101,12 +75,5 @@ class Wintergarten (object):
         for result in response:
 
             r.append(self.get_film(result['id']))
-
-        if self.database is not None:
-            
-            self.database.Sets.insert({
-                'set_id': set,
-                'set': r
-            })
 
         return r
