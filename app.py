@@ -24,7 +24,7 @@ def search():
 @app.route('/film/<id>', methods=['GET'])
 def film_view(id):
 
-	return render_template('film.html', film=wintergarten.get_film(id))
+	return render_template('film.html')
 
 @app.route('/film/<id>/json', methods=['GET'])
 def film_json(id):
