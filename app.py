@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, abort
+from flask import Flask, render_template, request, abort, jsonify
 import wintergarten
 from redis_cache import cache_it_json
 
@@ -26,6 +26,11 @@ def film_view(id):
 
 	return render_template('film.html', film=wintergarten.get_film(id))
 
+@app.route('/film/<id>/json', methods=['GET'])
+def film_json(id):
+
+	return jsonify(film=wintergarten.get_film(id))
+
 @app.route('/<listing>', methods=['GET'])
 def listing(listing):
 
@@ -37,7 +42,7 @@ def listing(listing):
 
 	if listing in map:
 
-		return	render_template("listing.html", films=wintergarten.get_set(map[listing]))
+		return render_template("listing.html", films=wintergarten.get_set(map[listing]))
 
 	else:
 
