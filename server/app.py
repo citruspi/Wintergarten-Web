@@ -1,5 +1,5 @@
 import falcon
-from films import FilmItem, FilmSearch
+from films import FilmItem, FilmSearch, FilmSet
 from wsgiref import simple_server
 
 app = falcon.API()
@@ -7,6 +7,8 @@ app = falcon.API()
 app.add_route('/films/title/{id}/', FilmItem())
 app.add_route('/films/search/{query}/', FilmSearch())
 app.add_route('/films/search/{query}/{page}/', FilmSearch())
+app.add_route('/films/set/{set}/', FilmSet())
+app.add_route('/films/set/{set}/{page}/', FilmSet())
 
 if __name__ == '__main__':
 

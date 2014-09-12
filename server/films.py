@@ -59,3 +59,29 @@ class FilmSearch(object):
 
             resp.status = falcon.HTTP_500
             resp.body = ''
+
+class FilmSet (object):
+
+    def on_get (self, req, resp, set, page=1):
+
+        r = requests.get('http://api.themoviedb.org/3/movie/' + set, params={
+            'api_key': os.environ['TMDB_API_KEY'],
+            'page': page
+        })
+
+        if r.status_code == 200:
+
+            result = r.json()
+
+            resp.status = falcon.HTTP_200
+            resp.body = json.dumps(result)
+
+        elif r.status_code == 404:
+
+            resp.status = falcon.HTTP_404
+            resp.body = ''
+
+        else:
+
+            resp.status = falcon.HTTP_500
+            resp.body = ''
