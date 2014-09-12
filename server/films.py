@@ -64,6 +64,15 @@ class FilmSet (object):
 
     def on_get (self, req, resp, set, page=1):
 
+        sets = ['latest', 'upcoming', 'now_playing', 'top_rated', 'popular']
+
+        if set not in sets:
+
+            resp.status = falcon.HTTP_404
+            resp.body = ''
+
+            return
+
         r = requests.get('http://api.themoviedb.org/3/movie/' + set, params={
             'api_key': os.environ['TMDB_API_KEY'],
             'page': page
