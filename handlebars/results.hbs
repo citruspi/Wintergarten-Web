@@ -1,0 +1,19 @@
+<div class="row">
+    <div class="small-12 columns">
+        <input type="text" id="search-field" {{bind-attr value=query}} />
+    </div>
+</div>
+
+<div class="row">
+    <div class="small-12 columns">
+        <ul class="small-block-grid-4 large-block-grid-5">
+            {{#each films}}
+            <li>
+                <a>
+                    <img {{bind-attr src=poster_path}}>
+                </a>
+            </li>
+            {{/each}}
+        </ul>
+    </div>
+</div>

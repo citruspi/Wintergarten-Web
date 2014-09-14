@@ -1,4 +1,4 @@
-['application', 'search'].forEach(function(template){
+['application', 'search', 'results'].forEach(function(template){
     $.ajax({
         url: '/handlebars/'+template+'.hbs',
         dataType: 'text',
@@ -20,4 +20,5 @@ var App = Ember.Application.create({
 
 App.Router.map(function () {
     this.resource('search', { path: '/' });
+    this.resource('results', { path: '/search/:query' });
 });
