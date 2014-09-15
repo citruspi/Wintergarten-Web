@@ -9,7 +9,7 @@
         <ul class="small-block-grid-4 large-block-grid-5">
             {{#each films}}
             <li>
-                <a>
+                <a {{bind-attr href=path}}>
                     <img {{bind-attr src=poster_path}}>
                 </a>
             </li>
